@@ -287,7 +287,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 95.7
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -716,12 +716,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8eb199eeafcd6514eac984e29f3ab095, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1.23
-  jumpStrength: 3
-  gravity: 9
-  terminalVelocity: 10
+  _speed: 3
+  _jumpStrength: 8.61
+  _gravity: 0
+  _terminalVelocity: 0
   _buttonAccel: 5
   _xDrag: 0
+  _maxJumpTime: 1
 --- !u!54 &2049315184
 Rigidbody:
   m_ObjectHideFlags: 0
