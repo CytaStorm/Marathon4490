@@ -8,6 +8,7 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] float _speed;
+    [SerializeField] float _initialJump;
     [SerializeField] float _jumpStrength;
     [SerializeField] float _gravity;
     [SerializeField] float _terminalVelocity;
@@ -51,7 +52,7 @@ public class PlayerController : MonoBehaviour
 
         // VERTICAL MOTION
         if (_jumpInputOn)
-        {
+         {
             // Apply velocity
             velocity.y += _jumpStrength * Time.deltaTime;
 
@@ -90,7 +91,9 @@ public class PlayerController : MonoBehaviour
         if ((Jump.performed) && (_onGround))
         {
             Debug.Log("JUMP");
-
+            Vector3 velocity = _rigidBody.velocity;
+            velocity.y = _initialJump;
+            _rigidBody.velocity = velocity;
             _jumpInputOn = true;
 
             /*
@@ -102,6 +105,7 @@ public class PlayerController : MonoBehaviour
         else if (Jump.canceled)
         {
             _jumpInputOn = false;
+            Debug.Log("JUMP off");
         }
     }
 
@@ -109,12 +113,14 @@ public class PlayerController : MonoBehaviour
     {
         //TODO: check if collision is ground
         _onGround = true;
+        print("ON Ground");
     }
 
     private void OnCollisionExit(Collision collision)
     {
         //TODO: check if collision is ground
         _onGround = false;
+        print("OFF Ground");
     }
 
 

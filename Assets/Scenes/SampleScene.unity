@@ -717,12 +717,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 3
-  _jumpStrength: 8.61
+  _initialJump: 5.8
+  _jumpStrength: 5.6
   _gravity: 0
   _terminalVelocity: 0
   _buttonAccel: 5
   _xDrag: 0
-  _maxJumpTime: 1
+  _maxJumpTime: 0.5
 --- !u!54 &2049315184
 Rigidbody:
   m_ObjectHideFlags: 0
