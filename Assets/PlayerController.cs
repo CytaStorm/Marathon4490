@@ -50,21 +50,6 @@ public class PlayerController : MonoBehaviour
             velocity.x = Mathf.Clamp(velocity.x + (_xDrag * Time.deltaTime), float.MinValue, 0);
         }
 
-        // VERTICAL MOTION
-        if (_jumpInputOn)
-         {
-            // Apply velocity
-            velocity.y += _jumpStrength * Time.deltaTime;
-
-            // Jumptimer calculations
-            _jumpTimer += Time.deltaTime;
-            if (_jumpTimer > _maxJumpTime)
-            {
-                _jumpTimer = 0f;
-                _jumpInputOn = false;
-            }
-        }
-
         // APPLY MOTION
         _rigidBody.velocity = velocity;
 
@@ -86,6 +71,13 @@ public class PlayerController : MonoBehaviour
                 
     }
 
+    private void EndJump()
+    {
+        _jumpInputOn = false;
+        _jumpTimer = 0f;
+        _rigidBody.AddForce(new Vector3(0, -160, 0), ForceMode.Acceleration);
+    }
+
     public void Jump(InputAction.CallbackContext Jump)
     {
         if ((Jump.performed) && (_onGround))
@@ -94,18 +86,13 @@ public class PlayerController : MonoBehaviour
             Vector3 velocity = _rigidBody.velocity;
             velocity.y = _initialJump;
             _rigidBody.velocity = velocity;
-            _jumpInputOn = true;
-
-            /*
-            Vector3 velocity = rigidBody.velocity;
-            velocity.y = jumpStrength;
-            rigidBody.velocity = velocity;
-            */
         }
         else if (Jump.canceled)
         {
-            _jumpInputOn = false;
             Debug.Log("JUMP off");
+            Vector3 velocity = _rigidBody.velocity;
+            velocity.y /= 2;
+            _rigidBody.velocity = velocity;
         }
     }
 
