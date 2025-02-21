@@ -34,6 +34,21 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        if (_jumpTimer < _maxJumpTime && !_onGround)
+        {
+            //apply gravity along curve
+            _gravity = Mathf.Lerp(-9.8f, 9.8f, _jumpTimer/_maxJumpTime);
+            _jumpTimer = Mathf.Clamp(_jumpTimer + Time.deltaTime, 0, _maxJumpTime);
+        }
+        else
+        {
+            _gravity = 9.8f;
+        }
+        //apply gravity
+        _rigidBody.AddForce(Vector3.down * _gravity, ForceMode.Acceleration);
+        
+
         // HORIZONTAL MOTION
         float acceleration = _direction.x * 10;
 
@@ -52,7 +67,8 @@ public class PlayerController : MonoBehaviour
 
         // APPLY MOTION
         _rigidBody.velocity = velocity;
-
+        
+        print(_jumpTimer);
     }
 
     public void Move(InputAction.CallbackContext Move)
@@ -83,16 +99,18 @@ public class PlayerController : MonoBehaviour
         if ((Jump.performed) && (_onGround))
         {
             Debug.Log("JUMP");
-            Vector3 velocity = _rigidBody.velocity;
-            velocity.y = _initialJump;
-            _rigidBody.velocity = velocity;
+            //Vector3 velocity = _rigidBody.velocity;
+            //velocity.y = _initialJump;
+            //_rigidBody.velocity = velocity;
+            _onGround = false;
+            //set gravity lower
         }
         else if (Jump.canceled)
         {
             Debug.Log("JUMP off");
-            Vector3 velocity = _rigidBody.velocity;
-            velocity.y /= 2;
-            _rigidBody.velocity = velocity;
+            //Vector3 velocity = _rigidBody.velocity;
+            //velocity.y /= 2;
+            //_rigidBody.velocity = velocity;
         }
     }
 

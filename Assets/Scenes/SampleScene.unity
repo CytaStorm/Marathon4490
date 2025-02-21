@@ -288,7 +288,7 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 95.7
-  orthographic: 0
+  orthographic: 1
   orthographic size: 5
   m_Depth: -1
   m_CullingMask:
@@ -717,13 +717,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 3
-  _initialJump: 5.8
+  _initialJump: 8.88
   _jumpStrength: 5.6
   _gravity: 0
   _terminalVelocity: 0
   _buttonAccel: 5
   _xDrag: 0
-  _maxJumpTime: 0.5
+  _maxJumpTime: 5
 --- !u!54 &2049315184
 Rigidbody:
   m_ObjectHideFlags: 0
