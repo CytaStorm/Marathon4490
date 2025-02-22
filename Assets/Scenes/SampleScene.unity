@@ -723,35 +723,35 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: -1
-      inSlope: 3
-      outSlope: 3
+      inSlope: 4.4846425
+      outSlope: 4.4846425
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.25
-      value: -0.25
-      inSlope: 2
-      outSlope: 2
+      time: 0.09439087
+      value: -0.5766907
+      inSlope: 2.9404345
+      outSlope: 2.9404345
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.75
-      value: 0.25
-      inSlope: 2
-      outSlope: 2
-      tangentMode: 34
+      time: 0.5974121
+      value: 0.12564087
+      inSlope: 0.85423774
+      outSlope: 0.85423774
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0.33333334
-      outWeight: 0.33333334
+      outWeight: 0.14605531
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 3
-      outSlope: 3
+      inSlope: 2.1718466
+      outSlope: 2.1718466
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
@@ -760,7 +760,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _xDrag: 0
-  _maxJumpTime: 1
+  jumpShortSpeed: 3
+  jumpSpeed: 10
 --- !u!54 &2049315184
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -783,7 +784,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
