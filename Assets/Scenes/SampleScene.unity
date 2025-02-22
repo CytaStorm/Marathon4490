@@ -716,14 +716,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8eb199eeafcd6514eac984e29f3ab095, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 3
-  _initialJump: 8.88
-  _jumpStrength: 5.6
-  _gravity: 0
-  _terminalVelocity: 0
-  _buttonAccel: 5
+  _gravity: 5
+  _gravityCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: -1
+      inSlope: 3
+      outSlope: 3
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.25
+      value: -0.25
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.75
+      value: 0.25
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 3
+      outSlope: 3
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _xDrag: 0
-  _maxJumpTime: 5
+  _maxJumpTime: 1
 --- !u!54 &2049315184
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -746,7 +783,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
