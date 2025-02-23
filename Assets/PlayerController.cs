@@ -26,6 +26,8 @@ public class PlayerController : MonoBehaviour
 	bool jump = false;
 	bool jumpCancel = false;
 
+	[SerializeField] float shotStrength;
+
     // Start is called before the first frame update
     void Start()
 	{
@@ -36,7 +38,7 @@ public class PlayerController : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-
+		// Jump detection
 		if (Input.GetButtonDown("Jump") && _onGround)
 		{
 			// Player starts pressing the button
@@ -47,7 +49,24 @@ public class PlayerController : MonoBehaviour
 			jumpCancel = true;
 		}
 
-		// HORIZONTAL MOTION
+		// Projectile launch code
+		if (Input.GetMouseButtonDown(0))
+		{
+			// Apply force in the direction of the mouse
+			float angle = GetAngleToMouse();
+			Vector3 forceDirection = Vector3.right;
+			float x = forceDirection.x;
+			float y = forceDirection.y;
+			// Multiply unit vector by rotation matrix
+			forceDirection.x = Mathf.Cos(angle) * x - Mathf.Sin(angle) * y;
+			forceDirection.y = Mathf.Sin(angle) * x + Mathf.Cos(angle) * y;
+			// Multiply direction vector by force scalar
+			forceDirection *= shotStrength;
+
+			_rigidBody.AddForce(forceDirection);
+		}
+
+		// Horizontal motion
 		float acceleration = _direction.x * 10;
 
 		Vector3 velocity = _rigidBody.velocity;
@@ -63,7 +82,6 @@ public class PlayerController : MonoBehaviour
 			velocity.x = Mathf.Clamp(velocity.x + (_xDrag * Time.deltaTime), float.MinValue, 0);
 		}
 
-		// APPLY MOTION
 		_rigidBody.velocity = velocity;
 	}
 
@@ -99,6 +117,7 @@ public class PlayerController : MonoBehaviour
 		}
 				
 	}
+
 	public void Jump(InputAction.CallbackContext Jump)
 	{
 		if ((Jump.performed) && (_onGround))
@@ -135,6 +154,16 @@ public class PlayerController : MonoBehaviour
 		print("OFF Ground");
 	}
 
+	private float GetAngleToMouse()
+	{
+        Vector3 worldLocation = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
+        Vector3 localLookVect = worldLocation - transform.position;
+        float angleOfRot = Mathf.Atan2(localLookVect.y, localLookVect.x);
+
+        angleOfRot *= Mathf.Rad2Deg;
+		return angleOfRot;
+        //return Quaternion.Euler(0, 0, angleOfRot);
+    }
 
 }
