@@ -52,18 +52,35 @@ public class PlayerController : MonoBehaviour
 		// Projectile launch code
 		if (Input.GetMouseButtonDown(0))
 		{
+            /*
+
 			// Apply force in the direction of the mouse
 			float angle = GetAngleToMouse();
 			Vector3 forceDirection = Vector3.right;
 			float x = forceDirection.x;
 			float y = forceDirection.y;
 			// Multiply unit vector by rotation matrix
-			forceDirection.x = Mathf.Cos(angle) * x - Mathf.Sin(angle) * y;
-			forceDirection.y = Mathf.Sin(angle) * x + Mathf.Cos(angle) * y;
-			// Multiply direction vector by force scalar
-			forceDirection *= shotStrength;
+			forceDirection.x = Mathf.Cos(angle) * x - Mathf.Sin(angle) * x;
+			forceDirection.y = Mathf.Sin(angle) * y + Mathf.Cos(angle) * y;
 
-			_rigidBody.AddForce(forceDirection);
+            print(forceDirection);
+
+            // Multiply direction vector by force scalar
+            forceDirection *= shotStrength;
+
+            print(angle);
+            print(forceDirection);
+			*/
+
+            Vector3 mouseLocation = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 forceDirection = transform.position - mouseLocation;
+			forceDirection.z = 0;
+			forceDirection.Normalize();
+
+            // Multiply direction vector by force scalar
+            forceDirection *= shotStrength;
+            print(forceDirection);
+            _rigidBody.AddForce(forceDirection);
 		}
 
 		// Horizontal motion
@@ -104,7 +121,7 @@ public class PlayerController : MonoBehaviour
 
 	public void Move(InputAction.CallbackContext Move)
 	{
-		print("here");
+		//print("here");
 		if (Move.performed)
 		{
 			float input = Move.ReadValue<float>();
@@ -154,14 +171,16 @@ public class PlayerController : MonoBehaviour
 		print("OFF Ground");
 	}
 
-	private float GetAngleToMouse()
+	public float GetAngleToMouse()
 	{
-        Vector3 worldLocation = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 mouseLocation = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-        Vector3 localLookVect = worldLocation - transform.position;
+        Vector3 localLookVect = mouseLocation - transform.position;
+		localLookVect.Normalize();
         float angleOfRot = Mathf.Atan2(localLookVect.y, localLookVect.x);
 
         angleOfRot *= Mathf.Rad2Deg;
+		//print(angleOfRot);
 		return angleOfRot;
         //return Quaternion.Euler(0, 0, angleOfRot);
     }
