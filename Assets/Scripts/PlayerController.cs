@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public partial class PlayerController : MonoBehaviour
@@ -15,6 +16,8 @@ public partial class PlayerController : MonoBehaviour
 	private Vector3 _direction;
 	private Vector3 _velocity;
 	private Vector2 _acceleration;
+	[SerializeField] private CapsuleCollider _capsuleCollider;
+	[SerializeField] private float _jumpDetectionHeight;
 
 
 	[Header("Jumping")]
@@ -27,7 +30,7 @@ public partial class PlayerController : MonoBehaviour
 	[Header("Shooting")]
 	[SerializeField] float shotStrength;
 
-	private bool _onGround = false;
+	public bool _onGround = false;
 
 	// Start is called before the first frame update
 	void Start()
@@ -43,6 +46,20 @@ public partial class PlayerController : MonoBehaviour
     }
 	void FixedUpdate()
 	{
+		//Check if player is on ground
+		RaycastHit hit;
+		if (Physics.Raycast(transform.position, Vector3.down, out hit, _jumpDetectionHeight))
+		{
+			if (hit.collider.tag == "Ground" && !jump)
+			{
+				_onGround = true;	
+			}
+            else
+            {
+				_onGround = false;
+            }
+        }
+
 		// Normal jump (full speed)
 		if (jump)
 		{
@@ -57,6 +74,11 @@ public partial class PlayerController : MonoBehaviour
 			jumpCancel = false;
 		}
 	}
+
+    private void OnDrawGizmos()
+    {
+		Gizmos.DrawLine(transform.position, transform.position + Vector3.down * _jumpDetectionHeight);
+    }
 
     private void HandleMovement()
     {
@@ -80,24 +102,26 @@ public partial class PlayerController : MonoBehaviour
         _rigidBody.MovePosition(_rigidBody.position + (_velocity / Time.deltaTime));
     }
 
-	private void OnCollisionEnter(Collision collision)
-	{
-		//TODO: check if collision is ground
-		_onGround = true;
-			
-		//foreach (ContactPoint item in collision.contacts)
-		//{
-		//	Debug.DrawRay(item.point, item.normal * 100, UnityEngine.Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f), 10f);
-		//}
-		print("ON Ground");
-	}
+	//private void OnCollisionEnter(Collision collision)
+	//{
+	//	//TODO: check if collision is ground
+	//	_onGround = true;
+	//		
+	//	print("enter collision: " + collision.gameObject.name);
+	//	//foreach (ContactPoint item in collision.contacts)
+	//	//{
+	//	//	Debug.DrawRay(item.point, item.normal * 100, UnityEngine.Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f), 10f);
+	//	//}
+	//	print("ON Ground");
+	//}
 
-	private void OnCollisionExit(Collision collision)
-	{
-		//TODO: check if collision is ground
-		_onGround = false;
-		print("OFF Ground");
-	}
+	//private void OnCollisionExit(Collision collision)
+	//{
+	//	//TODO: check if collision is ground
+	//	print(collision.gameObject.name);
+	//	_onGround = false;
+	//	print("OFF Ground");
+	//}
 
 	public float GetAngleToMouse()
 	{
