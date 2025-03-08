@@ -27,18 +27,19 @@ public class GunController : MonoBehaviour
 
     void ShootProjectile()
     {
+        // Instantiates the projectile at the players position and rotation
         GameObject projectile = Instantiate(projectilePrefab, player.position, gun.rotation);
         Rigidbody rb = projectile.GetComponent<Rigidbody>();
 
         if (rb != null)
         {
-            // Use the gun's forward direction as the direction to apply force
-            Vector3 direction = gun.right; // This is the direction the gun is pointing
+            Vector3 direction = gun.right;
 
-            // Apply the force in the direction the gun is pointing
+            // Applies the force in the direction the gun is pointing
             rb.AddForce(direction * speed, ForceMode.VelocityChange);
         }
 
+        // Destroys the projectile after 5 seconds
         Destroy(projectile, 5f);
     }
 
