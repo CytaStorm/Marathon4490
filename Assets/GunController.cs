@@ -8,6 +8,9 @@ public class GunController : MonoBehaviour
     public GameObject projectilePrefab;
 
     [SerializeField]
+    public Transform player;
+
+    [SerializeField]
     public Transform gun;
 
     [SerializeField]
@@ -24,9 +27,17 @@ public class GunController : MonoBehaviour
 
     void ShootProjectile()
     {
-        GameObject projectile = Instantiate(projectilePrefab, gun.position, gun.rotation);
-
+        GameObject projectile = Instantiate(projectilePrefab, player.position, gun.rotation);
         Rigidbody rb = projectile.GetComponent<Rigidbody>();
+
+        if (rb != null)
+        {
+            // Use the gun's forward direction as the direction to apply force
+            Vector3 direction = gun.right; // This is the direction the gun is pointing
+
+            // Apply the force in the direction the gun is pointing
+            rb.AddForce(direction * speed, ForceMode.VelocityChange);
+        }
 
         Destroy(projectile, 5f);
     }

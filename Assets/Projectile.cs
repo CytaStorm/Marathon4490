@@ -6,6 +6,6 @@ public class Projectile : MonoBehaviour
     {
         Debug.Log("Hit: " + collision.gameObject.name);
 
-        // Destroy(gameObject);
+        Destroy(gameObject);
     }
 }
