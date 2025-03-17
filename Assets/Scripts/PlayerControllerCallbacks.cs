@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,7 +13,15 @@ public partial class PlayerController : MonoBehaviour
 		{
 			float input = ctx.ReadValue<float>();
 
-			_direction = new Vector3(input, 0, 0);
+			//slope whose normal is facing up-left
+			if (_movementNormal.x != 0 || !jump)
+			{
+				_direction = Quaternion.AngleAxis(-90, Vector3.forward) * _movementNormal * input;
+			}
+			else
+			{
+				_direction = new Vector3(input, 0, 0);
+			}
 		}
 		else if (ctx.canceled)
 		{

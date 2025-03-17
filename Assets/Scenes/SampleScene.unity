@@ -748,13 +748,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1292819942}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.016984422, y: -0.042976413, z: 0.32755378, w: 0.9437018}
-  m_LocalPosition: {x: 1.81, y: 0.19, z: -0.39}
-  m_LocalScale: {x: 66.67913, y: 0.301, z: 3.5664651}
+  m_LocalRotation: {x: 0, y: 0, z: 0.3269045, w: 0.9450574}
+  m_LocalPosition: {x: 1.81, y: 0.19, z: 0.02}
+  m_LocalScale: {x: 66.67913, y: 5.069141, z: 3.5664651}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 3.452, y: -4.021, z: 38.162}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 38.162}
 --- !u!1 &1503261430
 GameObject:
   m_ObjectHideFlags: 0
@@ -782,7 +782,7 @@ Transform:
   m_GameObject: {fileID: 1503261430}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 0.95, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -880,7 +880,7 @@ CapsuleCollider:
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0, y: 1, z: 0}
+  m_Center: {x: 0, y: 0.95, z: 0}
 --- !u!4 &2049315180
 Transform:
   m_ObjectHideFlags: 0
@@ -997,10 +997,10 @@ MonoBehaviour:
   _xDrag: 2
   _capsuleCollider: {fileID: 2049315177}
   _jumpDetectionHeight: 0.2
+  _onGround: 0
   jumpShortSpeed: 3
   jumpSpeed: 10
   shotStrength: 300
-  _onGround: 0
 --- !u!54 &2049315184
 Rigidbody:
   m_ObjectHideFlags: 0

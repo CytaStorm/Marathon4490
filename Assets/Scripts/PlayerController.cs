@@ -19,6 +19,8 @@ public partial class PlayerController : MonoBehaviour
 	[SerializeField] private CapsuleCollider _capsuleCollider;
 	[SerializeField] private float _jumpDetectionHeight;
 
+	public bool _onGround = false;
+	private Vector3 _movementNormal = Vector2.zero;
 
 	[Header("Jumping")]
 	[SerializeField] private float jumpShortSpeed = 3f;   // Velocity for the lowest jump
@@ -30,7 +32,6 @@ public partial class PlayerController : MonoBehaviour
 	[Header("Shooting")]
 	[SerializeField] float shotStrength;
 
-	public bool _onGround = false;
 
 	// Start is called before the first frame update
 	void Start()
@@ -52,13 +53,18 @@ public partial class PlayerController : MonoBehaviour
 		{
 			if (hit.collider.tag == "Ground" && !jump)
 			{
-				_onGround = true;	
+				_onGround = true;
+				_movementNormal = hit.normal;
+				print(_movementNormal);
 			}
             else
             {
 				_onGround = false;
             }
-        }
+        } else
+		{
+			print("did not hit");
+		}
 
 		// Normal jump (full speed)
 		if (jump)
@@ -77,7 +83,8 @@ public partial class PlayerController : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-		Gizmos.DrawLine(transform.position, transform.position + Vector3.down * _jumpDetectionHeight);
+		//Gizmos.DrawLine(transform.position, transform.position + Vector3.down * _jumpDetectionHeight);
+		Gizmos.DrawLine(transform.position, transform.position + _velocity);
     }
 
     private void HandleMovement()
