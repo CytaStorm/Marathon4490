@@ -55,7 +55,7 @@ public partial class PlayerController : MonoBehaviour
 			{
 				_onGround = true;
 				_movementNormal = hit.normal;
-				print(_movementNormal);
+				//print(_movementNormal);
 			}
             else
             {
@@ -83,30 +83,39 @@ public partial class PlayerController : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-		//Gizmos.DrawLine(transform.position, transform.position + Vector3.down * _jumpDetectionHeight);
+		Gizmos.color = Color.green;
+		Gizmos.DrawLine(transform.position, transform.position + Vector3.down * _jumpDetectionHeight);
+		//print(transform.position + _velocity * 10);
 		Gizmos.DrawLine(transform.position, transform.position + _velocity);
+		Gizmos.color = Color.magenta;
+		Gizmos.DrawLine(transform.position, transform.position + _direction);
+		//print(_velocity);
+		//Gizmos.DrawLine(transform.position, transform.position + Vector3.right);
     }
 
     private void HandleMovement()
     {
-        // Movement
-        _acceleration.x = _direction.x / 100 * Time.deltaTime;
+		// Movement
+		_acceleration = _direction * 10;
         _velocity.x = Mathf.Clamp(_velocity.x + _acceleration.x * Time.deltaTime, -_maxSpeed, _maxSpeed);
-        _velocity.x += (_acceleration.x * Time.deltaTime);
+        _velocity.y = Mathf.Clamp(_velocity.y + _acceleration.y * Time.deltaTime, -_maxSpeed, _maxSpeed);
+        //_velocity.x += (_acceleration.x * Time.deltaTime);
 
         //Ground friction
         if (_velocity.x > 0)
         {
-            //apply xdrag
-            _velocity.x = Mathf.Clamp(_velocity.x - (_xDrag / 100000 * Time.deltaTime), 0, float.MaxValue);
+			//apply xdrag
+			//_velocity.x = Mathf.Clamp(_velocity.x - (_xDrag / 100000 * Time.deltaTime), 0, float.MaxValue);
+			_velocity.x = _velocity.x - (_xDrag / 100000 * Time.deltaTime);
         }
         else if (_velocity.x < 0)
         {
-            _velocity.x = Mathf.Clamp(_velocity.x + (_xDrag / 100000 * Time.deltaTime), float.MinValue, 0);
+			//_velocity.x = Mathf.Clamp(_velocity.x + (_xDrag / 100000 * Time.deltaTime), float.MinValue, 0);
+			_velocity.x = _velocity.x + (_xDrag / 100000 * Time.deltaTime);
         }
 
         //Move the player
-        _rigidBody.MovePosition(_rigidBody.position + (_velocity / Time.deltaTime));
+        _rigidBody.MovePosition(_rigidBody.position + (_velocity * Time.deltaTime));
     }
 
 	//private void OnCollisionEnter(Collision collision)

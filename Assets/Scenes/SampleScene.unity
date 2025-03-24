@@ -993,7 +993,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8eb199eeafcd6514eac984e29f3ab095, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxSpeed: 17.6
+  _maxSpeed: 8.9
   _xDrag: 2
   _capsuleCollider: {fileID: 2049315177}
   _jumpDetectionHeight: 0.2
