@@ -20,7 +20,7 @@ public class DebugArrowScript : MonoBehaviour
         transform.rotation = Quaternion.Euler(0, 0, angleOfRot);
 
         Vector3 position = target.transform.position;
-        position.z = -5;
+        position.z = -1;
         transform.position = position;
     }
 }
