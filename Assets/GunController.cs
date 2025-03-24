@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class GunController : MonoBehaviour
@@ -16,12 +18,19 @@ public class GunController : MonoBehaviour
     [SerializeField]
     public float speed;
 
+    [SerializeField]
+    public int cooldownTimeMilliseconds;
+
+    public bool cooldownWaiting = false;
+
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))// && !cooldownWaiting
         {
+            // Debug.Log("Cooldown Started");
             ShootProjectile();
+            // StartCooldown(cooldownTimeMilliseconds);
         }
     }
 
@@ -41,6 +50,14 @@ public class GunController : MonoBehaviour
 
         // Destroys the projectile after 5 seconds
         Destroy(projectile, 5f);
+    }
+
+    async void StartCooldown(int cooldownTime)
+    {
+        cooldownWaiting = true;
+        await Task.Delay(cooldownTime);
+        // Debug.Log("Cooldown Ended");
+        cooldownWaiting = false;
     }
 
 }

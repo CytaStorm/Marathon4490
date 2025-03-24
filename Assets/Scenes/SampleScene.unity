@@ -156,6 +156,8 @@ MonoBehaviour:
   player: {fileID: 2049315180}
   gun: {fileID: 1287912458}
   speed: 50
+  cooldownTimeMilliseconds: 1000
+  cooldownWaiting: 0
 --- !u!4 &173739664
 Transform:
   m_ObjectHideFlags: 0

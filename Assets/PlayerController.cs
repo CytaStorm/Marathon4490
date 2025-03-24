@@ -7,6 +7,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+	// GunController gunController = new GunController();
+
 	[SerializeField] float _gravity;
 	private float _appliedGravity;
 
@@ -80,11 +82,18 @@ public class PlayerController : MonoBehaviour
             // Multiply direction vector by force scalar
             forceDirection *= shotStrength;
             print(forceDirection);
+			// Code for cooldown
+			/*
+            if (!gunController.cooldownWaiting)
+			{
+                _rigidBody.AddForce(forceDirection);
+            }
+			*/
             _rigidBody.AddForce(forceDirection);
-		}
+        }
 
-		// Horizontal motion
-		float acceleration = _direction.x * 10;
+        // Horizontal motion
+        float acceleration = _direction.x * 10;
 
 		Vector3 velocity = _rigidBody.velocity;
 		velocity.x += (acceleration * Time.deltaTime);
