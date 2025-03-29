@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class GunController : MonoBehaviour
 {
@@ -21,36 +22,44 @@ public class GunController : MonoBehaviour
     [SerializeField]
     public int cooldownTimeMilliseconds;
 
-    public bool cooldownWaiting = false;
+    public bool cooldownWaiting;
+
+    public void Start()
+    {
+        cooldownWaiting = false;
+    }
 
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))// && !cooldownWaiting
-        {
-            // Debug.Log("Cooldown Started");
-            ShootProjectile();
-            // StartCooldown(cooldownTimeMilliseconds);
-        }
+        
     }
 
-    void ShootProjectile()
+    public void ShootProjectile(InputAction.CallbackContext ShootProjectile) // InputAction.CallbackContext Shoot
     {
-        // Instantiates the projectile at the players position and rotation
-        GameObject projectile = Instantiate(projectilePrefab, player.position, gun.rotation);
-        Rigidbody rb = projectile.GetComponent<Rigidbody>();
-
-        if (rb != null)
+        if (ShootProjectile.performed && !cooldownWaiting)
         {
-            Vector3 direction = gun.right;
+            // Instantiates the projectile at the players position and rotation
+            GameObject projectile = Instantiate(projectilePrefab, player.position, gun.rotation);
+            Rigidbody rb = projectile.GetComponent<Rigidbody>();
 
-            // Applies the force in the direction the gun is pointing
-            rb.AddForce(direction * speed, ForceMode.VelocityChange);
+            Debug.Log("It shot");
+
+            if (rb != null)
+            {
+                Vector3 direction = gun.right;
+
+                // Applies the force in the direction the gun is pointing
+                rb.AddForce(direction * speed, ForceMode.VelocityChange);
+            }
+
+            // Destroys the projectile after 5 seconds
+            Destroy(projectile, 5f);
+
+            StartCooldown(cooldownTimeMilliseconds);
         }
-
-        // Destroys the projectile after 5 seconds
-        Destroy(projectile, 5f);
     }
+
 
     async void StartCooldown(int cooldownTime)
     {
