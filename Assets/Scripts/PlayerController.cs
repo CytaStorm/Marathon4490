@@ -34,6 +34,7 @@ public partial class PlayerController : MonoBehaviour
 	[Header("Shooting")]
 	[SerializeField] float shotStrength;
 
+	public Vector3 Acceleration { get { return _acceleration; } }
 
 	// Start is called before the first frame update
 	void Start()
@@ -46,6 +47,8 @@ public partial class PlayerController : MonoBehaviour
 	// Update is called once per frame
 	void Update()
     {
+        print($"{Acceleration.x}, {Acceleration.y}: " +
+            $"{Mathf.Atan2(Acceleration.y, Acceleration.x)}");
     }
 	void FixedUpdate()
 	{
@@ -86,8 +89,16 @@ public partial class PlayerController : MonoBehaviour
 
 		// -- MOVE -- //
 
-		_acceleration = Vector3.zero;
-		_acceleration = new Vector3(1f, 0f, 0f) * (_direction.x * _accelerationRate * Time.fixedDeltaTime);
+		Vector3 directionFromSlope = _direction;
+
+        //slope whose normal is facing up-left
+        if (_movementNormal.x != 0 || !jump)
+        {
+            directionFromSlope = Quaternion.AngleAxis(-90, Vector3.forward) * _movementNormal * _direction.x;
+        }
+
+        _acceleration = Vector3.zero;
+		_acceleration = (directionFromSlope * _accelerationRate * Time.fixedDeltaTime);
 
 		_rigidBody.velocity += _acceleration;
 

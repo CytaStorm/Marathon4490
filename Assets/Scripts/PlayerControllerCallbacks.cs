@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.XR;
 
 public partial class PlayerController : MonoBehaviour
 {
@@ -12,23 +13,13 @@ public partial class PlayerController : MonoBehaviour
 		if (ctx.performed)
 		{
 			float input = ctx.ReadValue<float>();
-
-			//slope whose normal is facing up-left
-			if (_movementNormal.x != 0 || !jump)
-			{
-				_direction = Quaternion.AngleAxis(-90, Vector3.forward) * _movementNormal * input;
-			}
-			else
-			{
-				_direction = new Vector3(input, 0, 0);
-			}
-		}
-		else if (ctx.canceled)
-		{
-			_direction = Vector3.zero;
-		}
-				
-	}
+			_direction = new Vector3(input, 0, 0);
+        }
+        else if (ctx.canceled)
+        {
+            _direction = Vector3.zero;
+        }
+    }
 
 	public void Fire(InputAction.CallbackContext ctx)
 	{
