@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public partial class PlayerController : MonoBehaviour
 {
@@ -15,7 +16,8 @@ public partial class PlayerController : MonoBehaviour
 	[SerializeField] float _xDrag;
 	private Vector3 _direction;
 	private Vector3 _velocity;
-	private Vector2 _acceleration;
+	private Vector3 _acceleration;
+	[SerializeField] float _accelerationRate;
 	[SerializeField] private CapsuleCollider _capsuleCollider;
 	[SerializeField] private float _jumpDetectionHeight;
 
@@ -38,15 +40,17 @@ public partial class PlayerController : MonoBehaviour
 	{
 		_rigidBody = gameObject.GetComponent<Rigidbody>();
 		_rigidBody.freezeRotation = true;
+		//_rigidBody.constraints = RigidbodyConstraints.FreezePositionZ;
 	}
 
 	// Update is called once per frame
 	void Update()
     {
-        HandleMovement();
     }
 	void FixedUpdate()
 	{
+		// -- JUMP -- //
+
 		//Check if player is on ground
 		RaycastHit hit;
 		if (Physics.Raycast(transform.position, Vector3.down, out hit, _jumpDetectionHeight))
@@ -79,7 +83,15 @@ public partial class PlayerController : MonoBehaviour
 				_rigidBody.velocity = new Vector2(_rigidBody.velocity.x, jumpShortSpeed);
 			jumpCancel = false;
 		}
-	}
+
+		// -- MOVE -- //
+
+		_acceleration = Vector3.zero;
+		_acceleration = new Vector3(1f, 0f, 0f) * (_direction.x * _accelerationRate * Time.fixedDeltaTime);
+
+		_rigidBody.velocity += _acceleration;
+
+    }
 
     private void OnDrawGizmos()
     {
@@ -93,6 +105,7 @@ public partial class PlayerController : MonoBehaviour
 		//Gizmos.DrawLine(transform.position, transform.position + Vector3.right);
     }
 
+	/*
     private void HandleMovement()
     {
 		// Movement
@@ -117,6 +130,7 @@ public partial class PlayerController : MonoBehaviour
         //Move the player
         _rigidBody.MovePosition(_rigidBody.position + (_velocity * Time.deltaTime));
     }
+	*/
 
 	//private void OnCollisionEnter(Collision collision)
 	//{
