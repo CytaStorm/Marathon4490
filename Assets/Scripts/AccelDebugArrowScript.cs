@@ -16,7 +16,7 @@ public class AccelDebugArrowScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float angleOfRot = Mathf.Atan2(controller.Acceleration.y, controller.Acceleration.x);
+        float angleOfRot = Mathf.Rad2Deg * Mathf.Atan2(controller.Acceleration.y, controller.Acceleration.x);
         transform.rotation = Quaternion.Euler(0, 0, angleOfRot);
 
         Vector3 position = target.transform.position;

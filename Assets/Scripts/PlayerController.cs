@@ -21,6 +21,10 @@ public partial class PlayerController : MonoBehaviour
 	[SerializeField] private CapsuleCollider _capsuleCollider;
 	[SerializeField] private float _jumpDetectionHeight;
 
+	private Collider _collider;
+	[SerializeField] private PhysicMaterial _slopeFrictionMaterial;
+	[SerializeField] private PhysicMaterial _noFrictionMaterial;
+
 	public bool _onGround = false;
 	private Vector3 _movementNormal = Vector2.zero;
 
@@ -42,13 +46,13 @@ public partial class PlayerController : MonoBehaviour
 		_rigidBody = gameObject.GetComponent<Rigidbody>();
 		_rigidBody.freezeRotation = true;
 		//_rigidBody.constraints = RigidbodyConstraints.FreezePositionZ;
+		_collider = gameObject.GetComponent<Collider>();
 	}
 
 	// Update is called once per frame
 	void Update()
     {
-        print($"{Acceleration.x}, {Acceleration.y}: " +
-            $"{Mathf.Atan2(Acceleration.y, Acceleration.x)}");
+        
     }
 	void FixedUpdate()
 	{
@@ -62,8 +66,11 @@ public partial class PlayerController : MonoBehaviour
 			{
 				_onGround = true;
 				_movementNormal = hit.normal;
-				//print(_movementNormal);
-			}
+                //print(_movementNormal);
+                //print($"{Acceleration.x}, {Acceleration.y}: " +
+                //$"{Mathf.Atan2(Acceleration.y, Acceleration.x)}");
+                //print(Mathf.Rad2Deg * Mathf.Atan2(Acceleration.y, Acceleration.x));
+            }
             else
             {
 				_onGround = false;
@@ -87,21 +94,33 @@ public partial class PlayerController : MonoBehaviour
 			jumpCancel = false;
 		}
 
-		// -- MOVE -- //
+        // -- MOVE -- //
 
-		Vector3 directionFromSlope = _direction;
+        // If the player is static and on a slope, make friction infinite
+		if(IsOnSlope() && _rigidBody.velocity.y < 0f && _direction.x == 0f)
+		{
+			_collider.material = _slopeFrictionMaterial;
+		}
+		else
+		{
+			_collider.material = _noFrictionMaterial;
+		}
 
-        //slope whose normal is facing up-left
-        if (_movementNormal.x != 0 || !jump)
+        // Set acceleration to be perpindicular to the slope
+        Vector3 directionFromSlope = _direction;
+        if ((_movementNormal.x != 0 || !jump) && _onGround)
         {
             directionFromSlope = Quaternion.AngleAxis(-90, Vector3.forward) * _movementNormal * _direction.x;
+            print(Mathf.Rad2Deg * Mathf.Atan2(directionFromSlope.y, directionFromSlope.x));
         }
 
         _acceleration = Vector3.zero;
 		_acceleration = (directionFromSlope * _accelerationRate * Time.fixedDeltaTime);
 
+		// Update velocity
 		_rigidBody.velocity += _acceleration;
 
+		
     }
 
     private void OnDrawGizmos()
@@ -176,5 +195,12 @@ public partial class PlayerController : MonoBehaviour
 		//print(angleOfRot);
 		return angleOfRot;
 		//return Quaternion.Euler(0, 0, angleOfRot);
+	}
+
+	private bool IsOnSlope()
+	{
+        Vector3 directionFromSlope = Quaternion.AngleAxis(-90, Vector3.forward) * _movementNormal * _direction.x;
+		float slopeAngle = Mathf.Rad2Deg * Mathf.Atan2(directionFromSlope.y, directionFromSlope.x);
+        return (_onGround && slopeAngle > -1f && slopeAngle < 1f);
 	}
 }
