@@ -10,8 +10,11 @@ public partial class PlayerController : MonoBehaviour
 {
 	private Rigidbody _rigidBody;
 
-	//Movement calculations 
-	[Header("Basic Movement")]
+	[Header("Debug Only!")]
+	public Vector3 rigidbodyVelocity;
+
+    //Movement calculations 
+    [Header("Basic Movement")]
 	[SerializeField][Range(0, 100)] float _maxSpeed;
 	[SerializeField] float _xDrag;
 	private Vector3 _direction;
@@ -52,7 +55,7 @@ public partial class PlayerController : MonoBehaviour
 	// Update is called once per frame
 	void Update()
     {
-        
+        rigidbodyVelocity = _rigidBody.velocity;
     }
 	void FixedUpdate()
 	{
@@ -94,13 +97,22 @@ public partial class PlayerController : MonoBehaviour
 			jumpCancel = false;
 		}
 
-        // -- MOVE -- //
+		// -- MOVE -- //
 
-        // If the player is static and on a slope, make friction infinite
-		if(IsOnSlope() && _rigidBody.velocity.y < 0f && _direction.x == 0f)
+		// If the player is static and on a slope, make friction infinite
+		if(IsOnSlope() && /*_rigidBody.velocity.y < 0f &&*/ _direction.x == 0f)
 		{
-			_collider.material = _slopeFrictionMaterial;
-		}
+			//_collider.material = _slopeFrictionMaterial;
+			if (_rigidBody.velocity.magnitude > 1f)
+			{
+                _rigidBody.velocity /= 1.1f;
+            }
+			else
+			{
+                _rigidBody.velocity = Vector3.zero;
+            }
+			
+        }
 		else
 		{
 			_collider.material = _noFrictionMaterial;
@@ -111,7 +123,7 @@ public partial class PlayerController : MonoBehaviour
         if ((_movementNormal.x != 0 || !jump) && _onGround)
         {
             directionFromSlope = Quaternion.AngleAxis(-90, Vector3.forward) * _movementNormal * _direction.x;
-            print(Mathf.Rad2Deg * Mathf.Atan2(directionFromSlope.y, directionFromSlope.x));
+            //print(Mathf.Rad2Deg * Mathf.Atan2(directionFromSlope.y, directionFromSlope.x));
         }
 
         _acceleration = Vector3.zero;
@@ -199,8 +211,9 @@ public partial class PlayerController : MonoBehaviour
 
 	private bool IsOnSlope()
 	{
-        Vector3 directionFromSlope = Quaternion.AngleAxis(-90, Vector3.forward) * _movementNormal * _direction.x;
+        Vector3 directionFromSlope = Quaternion.AngleAxis(-90, Vector3.forward) * _movementNormal;
 		float slopeAngle = Mathf.Rad2Deg * Mathf.Atan2(directionFromSlope.y, directionFromSlope.x);
-        return (_onGround && slopeAngle > -1f && slopeAngle < 1f);
+		print(slopeAngle);
+        return (_onGround && (slopeAngle > 1f || slopeAngle < -1f));
 	}
 }
