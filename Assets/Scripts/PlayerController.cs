@@ -105,7 +105,9 @@ public partial class PlayerController : MonoBehaviour
 			//_collider.material = _slopeFrictionMaterial;
 			if (_rigidBody.velocity.magnitude > 1f)
 			{
-                _rigidBody.velocity /= 1.1f;
+				Vector3 newVelocity = _rigidBody.velocity;
+				newVelocity.x /= 1.1f;
+				_rigidBody.velocity = newVelocity;
             }
 			else
 			{
@@ -116,6 +118,14 @@ public partial class PlayerController : MonoBehaviour
 		else
 		{
 			_collider.material = _noFrictionMaterial;
+		}
+
+		// lock player onto slopes
+		if(IsOnSlope() && !jump)
+		{
+			Vector3 newVelocity = _rigidBody.velocity;
+			newVelocity.y = 0f;
+			_rigidBody.velocity = newVelocity;
 		}
 
         // Set acceleration to be perpindicular to the slope
