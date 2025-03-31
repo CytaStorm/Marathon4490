@@ -7,9 +7,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-	GunController gunController;
-
-	[SerializeField] float _gravity;
+    [SerializeField] float _gravity;
 	private float _appliedGravity;
 
 	[SerializeField] private AnimationCurve _gravityCurve;
@@ -36,11 +34,10 @@ public class PlayerController : MonoBehaviour
 		_rigidBody = gameObject.GetComponent<Rigidbody>();
 		_rigidBody.freezeRotation = true;
 
-		gunController = GetComponent<GunController>();
-	}
+    }
 
-	// Update is called once per frame
-	void Update()
+    // Update is called once per frame
+    void Update()
 	{
 		// Jump detection
 		if (Input.GetButtonDown("Jump") && _onGround)
@@ -84,14 +81,8 @@ public class PlayerController : MonoBehaviour
             // Multiply direction vector by force scalar
             forceDirection *= shotStrength;
             print(forceDirection);
-			// Code for cooldown
-			
-            if (!gunController.cooldownWaiting)
-			{
-                _rigidBody.AddForce(forceDirection);
-            }
-			
-            // _rigidBody.AddForce(forceDirection);
+
+            _rigidBody.AddForce(forceDirection);
         }
 
         // Horizontal motion

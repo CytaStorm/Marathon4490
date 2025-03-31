@@ -69,4 +69,41 @@ public class GunController : MonoBehaviour
         cooldownWaiting = false;
     }
 
+    /*
+    Code to be put in playercontroller
+      Fields:
+
+    // GunController gunController;
+
+
+    START:
+
+	gunController = GetComponent<GunController>();
+    if (gunController == null)
+    {
+        Debug.LogError("GunController not found on the same GameObject!");
+    }
+	else
+	{
+        Debug.Log("GunController found");
+    }
+	
+
+    UPDATE:
+
+    if (Input.GetMouseButtonDown(0))    // To be changed to new input system later
+    {
+        if (gunController.cooldownWaiting)
+            {
+                Debug.Log("Cooldown is active!");
+            }
+            else
+            {
+                _rigidBody.AddForce(forceDirection);
+            } 
+    }
+
+    */
+
+
 }
