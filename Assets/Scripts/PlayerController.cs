@@ -123,9 +123,7 @@ public partial class PlayerController : MonoBehaviour
 		// lock player onto slopes
 		if(IsOnSlope() && !jump)
 		{
-			Vector3 newVelocity = _rigidBody.velocity;
-			newVelocity.y = 0f;
-			_rigidBody.velocity = newVelocity;
+
 		}
 
         // Set acceleration to be perpindicular to the slope
