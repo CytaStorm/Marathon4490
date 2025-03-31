@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class GunController : MonoBehaviour
 {
@@ -21,18 +22,43 @@ public class GunController : MonoBehaviour
 
     [SerializeField]
     public int cooldownTimeMilliseconds;
-
     public bool cooldownWaiting;
+
+    [SerializeField]
+    private Slider cooldownSlider;
+
+    private float cooldownTimer;
 
     public void Start()
     {
         cooldownWaiting = false;
+        cooldownTimer = 0f;
+
+        if (cooldownSlider != null)
+        {
+            cooldownSlider.value = 0f;
+        }
     }
 
 
     private void Update()
     {
-        
+        if (cooldownWaiting)
+        {
+            // Updates the cooldown timer
+            cooldownTimer -= Time.deltaTime;
+            cooldownSlider.value = Mathf.Clamp01(cooldownTimer / cooldownTimeMilliseconds * 1000);
+
+            // Optional: You can add a visual effect like changing color based on progress
+            if (cooldownSlider.value == 1f)
+            {
+                cooldownSlider.GetComponentInChildren<Image>().color = Color.green; // Fully charged color
+            }
+            else
+            {
+                cooldownSlider.GetComponentInChildren<Image>().color = Color.red; // Cooldown in progress color
+            }
+        }
     }
 
     public void ShootProjectile(InputAction.CallbackContext ShootProjectile) // InputAction.CallbackContext Shoot
@@ -64,9 +90,12 @@ public class GunController : MonoBehaviour
     async void StartCooldown(int cooldownTime)
     {
         cooldownWaiting = true;
+        cooldownTimer = cooldownTime / 1000f;
         await Task.Delay(cooldownTime);
         // Debug.Log("Cooldown Ended");
         cooldownWaiting = false;
+        cooldownTimer = 0f;
+        cooldownSlider.value = 0f;
     }
 
     /*
