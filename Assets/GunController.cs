@@ -37,6 +37,7 @@ public class GunController : MonoBehaviour
         if (cooldownSlider != null)
         {
             cooldownSlider.value = 0f;
+            cooldownSlider.gameObject.SetActive(false);
         }
     }
 
@@ -49,14 +50,16 @@ public class GunController : MonoBehaviour
             cooldownTimer -= Time.deltaTime;
             cooldownSlider.value = Mathf.Clamp01(cooldownTimer / cooldownTimeMilliseconds * 1000);
 
-            // Optional: You can add a visual effect like changing color based on progress
-            if (cooldownSlider.value == 1f)
+            // Changes color/active based on how filled it is
+            if (cooldownSlider.value == 0f)
             {
-                cooldownSlider.GetComponentInChildren<Image>().color = Color.green; // Fully charged color
+                // cooldownSlider.GetComponentInChildren<Image>().color = Color.green;
+                cooldownSlider.gameObject.SetActive(false);
             }
             else
             {
-                cooldownSlider.GetComponentInChildren<Image>().color = Color.red; // Cooldown in progress color
+                cooldownSlider.gameObject.SetActive(true);
+                cooldownSlider.GetComponentInChildren<Image>().color = Color.black; // Cooldown in progress color
             }
         }
     }
