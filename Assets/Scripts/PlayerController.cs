@@ -15,11 +15,9 @@ public partial class PlayerController : MonoBehaviour
 
     //Movement calculations 
     [Header("Basic Movement")]
-	[SerializeField][Range(0, 100)] float _maxSpeed;
-	[SerializeField] float _xDrag;
+	[SerializeField] float _speed;
 	private Vector3 _direction;
 	private Vector3 _velocity;
-	private Vector3 _acceleration;
 	[SerializeField] float _accelerationRate;
 	[SerializeField] private CapsuleCollider _capsuleCollider;
 	[SerializeField] private float _jumpDetectionHeight;
@@ -29,6 +27,7 @@ public partial class PlayerController : MonoBehaviour
 	[SerializeField] private PhysicMaterial _noFrictionMaterial;
 
 	public bool _onGround = false;
+	public bool _onSlope = false;
 	private Vector3 _movementNormal = Vector2.zero;
 
 	[Header("Jumping")]
@@ -41,7 +40,6 @@ public partial class PlayerController : MonoBehaviour
 	[Header("Shooting")]
 	[SerializeField] float shotStrength;
 
-	public Vector3 Acceleration { get { return _acceleration; } }
 
 	// Start is called before the first frame update
 	void Start()
@@ -99,48 +97,10 @@ public partial class PlayerController : MonoBehaviour
 
 		// -- MOVE -- //
 
-		// If the player is static and on a slope, make friction infinite
-		if(IsOnSlope() && /*_rigidBody.velocity.y < 0f &&*/ _direction.x == 0f)
-		{
-			//_collider.material = _slopeFrictionMaterial;
-			if (_rigidBody.velocity.magnitude > 1f)
-			{
-				Vector3 newVelocity = _rigidBody.velocity;
-				newVelocity.x /= 1.1f;
-				_rigidBody.velocity = newVelocity;
-            }
-			else
-			{
-                _rigidBody.velocity = Vector3.zero;
-            }
-			
-        }
-		else
-		{
-			_collider.material = _noFrictionMaterial;
-		}
+		Vector3 horizontalMove = _rigidBody.velocity;
+		horizontalMove.x = _direction.x * _speed;
+		_rigidBody.velocity = horizontalMove;
 
-		// lock player onto slopes
-		if(IsOnSlope() && !jump)
-		{
-
-		}
-
-        // Set acceleration to be perpindicular to the slope
-        Vector3 directionFromSlope = _direction;
-        if ((_movementNormal.x != 0 || !jump) && _onGround)
-        {
-            directionFromSlope = Quaternion.AngleAxis(-90, Vector3.forward) * _movementNormal * _direction.x;
-            //print(Mathf.Rad2Deg * Mathf.Atan2(directionFromSlope.y, directionFromSlope.x));
-        }
-
-        _acceleration = Vector3.zero;
-		_acceleration = (directionFromSlope * _accelerationRate * Time.fixedDeltaTime);
-
-		// Update velocity
-		_rigidBody.velocity += _acceleration;
-
-		
     }
 
     private void OnDrawGizmos()
@@ -155,32 +115,6 @@ public partial class PlayerController : MonoBehaviour
 		//Gizmos.DrawLine(transform.position, transform.position + Vector3.right);
     }
 
-	/*
-    private void HandleMovement()
-    {
-		// Movement
-		_acceleration = _direction * 10;
-        _velocity.x = Mathf.Clamp(_velocity.x + _acceleration.x * Time.deltaTime, -_maxSpeed, _maxSpeed);
-        _velocity.y = Mathf.Clamp(_velocity.y + _acceleration.y * Time.deltaTime, -_maxSpeed, _maxSpeed);
-        //_velocity.x += (_acceleration.x * Time.deltaTime);
-
-        //Ground friction
-        if (_velocity.x > 0)
-        {
-			//apply xdrag
-			//_velocity.x = Mathf.Clamp(_velocity.x - (_xDrag / 100000 * Time.deltaTime), 0, float.MaxValue);
-			_velocity.x = _velocity.x - (_xDrag / 100000 * Time.deltaTime);
-        }
-        else if (_velocity.x < 0)
-        {
-			//_velocity.x = Mathf.Clamp(_velocity.x + (_xDrag / 100000 * Time.deltaTime), float.MinValue, 0);
-			_velocity.x = _velocity.x + (_xDrag / 100000 * Time.deltaTime);
-        }
-
-        //Move the player
-        _rigidBody.MovePosition(_rigidBody.position + (_velocity * Time.deltaTime));
-    }
-	*/
 
 	//private void OnCollisionEnter(Collision collision)
 	//{
@@ -215,13 +149,5 @@ public partial class PlayerController : MonoBehaviour
 		//print(angleOfRot);
 		return angleOfRot;
 		//return Quaternion.Euler(0, 0, angleOfRot);
-	}
-
-	private bool IsOnSlope()
-	{
-        Vector3 directionFromSlope = Quaternion.AngleAxis(-90, Vector3.forward) * _movementNormal;
-		float slopeAngle = Mathf.Rad2Deg * Mathf.Atan2(directionFromSlope.y, directionFromSlope.x);
-		print(slopeAngle);
-        return (_onGround && (slopeAngle > 1f || slopeAngle < -1f));
 	}
 }
