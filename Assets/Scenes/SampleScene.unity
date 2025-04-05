@@ -1500,6 +1500,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _xDrag: 0
+  dying: 0
   jumpShortSpeed: 3
   jumpSpeed: 10
   shotStrength: 300

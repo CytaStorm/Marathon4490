@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour
 
 	private bool _onGround = false;
 
+	public bool dying = false;
+
 
     [SerializeField] private float jumpShortSpeed = 3f;   // Velocity for the lowest jump
     [SerializeField] private float jumpSpeed = 6f;          // Velocity for the highest jump
