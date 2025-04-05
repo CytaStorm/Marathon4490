@@ -7,6 +7,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] GunController gunController; // FOR COOLDOWN
+
     [SerializeField] float _gravity;
 	private float _appliedGravity;
 
@@ -34,6 +36,16 @@ public class PlayerController : MonoBehaviour
 		_rigidBody = gameObject.GetComponent<Rigidbody>();
 		_rigidBody.freezeRotation = true;
 
+		// FOR COOLDOWN
+        gunController = GetComponent<GunController>();
+        if (gunController == null)
+        {
+            Debug.LogError("GunController not found on the same GameObject!");
+        }
+        else
+        {
+            Debug.Log("GunController found");
+        }
     }
 
     // Update is called once per frame
@@ -82,7 +94,8 @@ public class PlayerController : MonoBehaviour
             forceDirection *= shotStrength;
             print(forceDirection);
 
-            _rigidBody.AddForce(forceDirection);
+            // commented out FOR COOLDOWN
+            // _rigidBody.AddForce(forceDirection);
         }
 
         // Horizontal motion
@@ -157,6 +170,29 @@ public class PlayerController : MonoBehaviour
 			//velocity.y /= 2;
 			//_rigidBody.velocity = velocity;
 		}
+	}
+
+	public void ShootProjectile(InputAction.CallbackContext ShootProjectile)
+	{
+		if (gunController.cooldownWaiting)
+        {
+            Debug.Log("Cooldown is active!");
+        }
+        else
+        {
+			Vector3 mouseLocation = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 forceDirection = transform.position - mouseLocation;
+			forceDirection.z = 0;
+			forceDirection.Normalize();
+
+            // Multiply direction vector by force scalar
+            forceDirection *= shotStrength;
+            print(forceDirection);
+
+            _rigidBody.AddForce(forceDirection);
+
+            Debug.Log("Thing shot hopefully");
+        }
 	}
 
 	private void OnCollisionEnter(Collision collision)

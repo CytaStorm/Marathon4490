@@ -2008,6 +2008,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 2049315183}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: ShootProjectile
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: cb213e40-ac79-4e05-b6cb-5ac7a6854b8c
     m_ActionName: Player/Shoot[/Mouse/leftButton]
   m_NeverAutoSwitchControlSchemes: 0
@@ -2027,6 +2039,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8eb199eeafcd6514eac984e29f3ab095, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gunController: {fileID: 2049315185}
   _gravity: 5
   _gravityCurve:
     serializedVersion: 2
