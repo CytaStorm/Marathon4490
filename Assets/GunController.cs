@@ -102,39 +102,28 @@ public class GunController : MonoBehaviour
     }
 
     /*
-    Code to be put in playercontroller
-      Fields:
-
-    // GunController gunController;
-
-
-    START:
-
-	gunController = GetComponent<GunController>();
-    if (gunController == null)
-    {
-        Debug.LogError("GunController not found on the same GameObject!");
-    }
-	else
+    public void ShootProjectile(InputAction.CallbackContext ShootProjectile)
 	{
-        Debug.Log("GunController found");
-    }
-	
+		if (gunController.cooldownWaiting)
+        {
+            Debug.Log("Cooldown is active!");
+        }
+        else
+        {
+			Vector3 mouseLocation = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 forceDirection = transform.position - mouseLocation;
+			forceDirection.z = 0;
+			forceDirection.Normalize();
 
-    UPDATE:
+            // Multiply direction vector by force scalar
+            forceDirection *= shotStrength;
+            print(forceDirection);
 
-    if (Input.GetMouseButtonDown(0))    // To be changed to new input system later
-    {
-        if (gunController.cooldownWaiting)
-            {
-                Debug.Log("Cooldown is active!");
-            }
-            else
-            {
-                _rigidBody.AddForce(forceDirection);
-            } 
-    }
+            _rigidBody.AddForce(forceDirection);
 
+            Debug.Log("Thing shot hopefully");
+        }
+	}
     */
 
 
