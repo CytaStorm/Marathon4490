@@ -18,13 +18,9 @@ public partial class PlayerController : MonoBehaviour
 	[SerializeField] float _speed;
 	private Vector3 _direction;
 	private Vector3 _velocity;
-	[SerializeField] float _accelerationRate;
 	[SerializeField] private CapsuleCollider _capsuleCollider;
 	[SerializeField] private float _jumpDetectionHeight;
-
-	private Collider _collider;
-	[SerializeField] private PhysicMaterial _slopeFrictionMaterial;
-	[SerializeField] private PhysicMaterial _noFrictionMaterial;
+	
 
 	public bool _onGround = false;
 	public bool _onSlope = false;
@@ -33,8 +29,10 @@ public partial class PlayerController : MonoBehaviour
 	[Header("Jumping")]
 	[SerializeField] private float jumpShortSpeed = 3f;   // Velocity for the lowest jump
 	[SerializeField] private float jumpSpeed = 6f;          // Velocity for the highest jump
+	[SerializeField] private float _gravityForce;
+    private ConstantForce _gravity;
 
-	bool jump = false;
+    bool jump = false;
 	bool jumpCancel = false;
 
 	[Header("Shooting")]
@@ -46,9 +44,11 @@ public partial class PlayerController : MonoBehaviour
 	{
 		_rigidBody = gameObject.GetComponent<Rigidbody>();
 		_rigidBody.freezeRotation = true;
-		//_rigidBody.constraints = RigidbodyConstraints.FreezePositionZ;
-		_collider = gameObject.GetComponent<Collider>();
-	}
+        //_rigidBody.constraints = RigidbodyConstraints.FreezePositionZ;
+
+        _gravity = gameObject.AddComponent<ConstantForce>();
+        _gravity.force = new Vector3(0.0f, -_gravityForce, 0.0f);
+    }
 
 	// Update is called once per frame
 	void Update()
@@ -86,14 +86,19 @@ public partial class PlayerController : MonoBehaviour
 		{
 			_rigidBody.velocity = new Vector3(_rigidBody.velocity.x, jumpSpeed, 0);
 			jump = false;
-		}
+
+            // Make gravity normal when jumping
+            _gravity.force = new Vector3(0.0f, -_gravityForce, 0.0f);
+        }
 		// Cancel the jump when the button is no longer pressed
 		if (jumpCancel)
 		{
 			if (_rigidBody.velocity.y > jumpShortSpeed)
 				_rigidBody.velocity = new Vector2(_rigidBody.velocity.x, jumpShortSpeed);
 			jumpCancel = false;
-		}
+
+            
+        }
 
 		// -- MOVE -- //
 
